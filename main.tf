@@ -42,9 +42,26 @@ resource "azurerm_subnet" "subnet-web" {
         azurerm_virtual_network.vnet[count.index].address_space,
         count.index,
       ),
-      13,
+      4,
       0,
-    ) # /29
+    )
+  ]
+}
+
+resource "azurerm_subnet" "subnet-db" {
+  count                = length(var.location)
+  name                 = "subnet-db-${var.prefix}-${count.index}"
+  resource_group_name  = element(azurerm_resource_group.rg-web.*.name, count.index)
+  virtual_network_name = element(azurerm_virtual_network.vnet.*.name, count.index)
+  address_prefixes = [
+    cidrsubnet(
+      element(
+        azurerm_virtual_network.vnet[count.index].address_space,
+        count.index,
+      ),
+      4,
+      15,
+    )
   ]
 }
 
@@ -156,5 +173,47 @@ resource "azurerm_windows_virtual_machine_scale_set" "scale" {
         idle_timeout_in_minutes = 15
       }
     }
+  }
+}
+
+resource "azurerm_network_interface" "nic-db" {
+  count               = length(var.location)
+  name                = "nic-db-${var.prefix}-${count.index}"
+  location            = element(azurerm_resource_group.rg-web.*.location, count.index)
+  resource_group_name = element(azurerm_resource_group.rg-web.*.name, count.index)
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = element(azurerm_subnet.subnet-db.*.id, count.index)
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+# Create Virtual Machine (VM) for private Database
+resource "azurerm_linux_virtual_machine" "vm-db" {
+  count               = length(var.location)
+  name                = "vm-db-${var.prefix}-${count.index}"
+  location            = element(azurerm_resource_group.rg-web.*.location, count.index)
+  resource_group_name = element(azurerm_resource_group.rg-web.*.name, count.index)
+  size                = "Standard_D2s_v3"
+
+  admin_username                  = "adminuser"
+  admin_password                  = "Admin+123456"
+  disable_password_authentication = false
+
+  network_interface_ids = [
+    element(azurerm_network_interface.nic-db.*.id, count.index),
+  ]
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-focal"
+    sku       = "20_04-lts-gen2"
+    version   = "latest"
   }
 }
