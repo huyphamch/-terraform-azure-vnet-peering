@@ -7,7 +7,7 @@ variable "prefix" {
 variable "location" {
   default = [
     "eastus",
-    "northeurope",
+    "eastus2",
   ]
 }
 

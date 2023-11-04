@@ -12,8 +12,8 @@ terraform {
 
 # Configure the Azure Provider
 provider "azurerm" {
-  tenant_id       = "e2edce3b-5259-4679-9335-940f37afa5e4"
-  subscription_id = "4bdb238c-14b9-4485-b7e9-52e890fe3321"
+  tenant_id       = "618e073f-1654-4751-98de-a4f0bbb8c7d2"
+  subscription_id = "3ba5e883-0257-4677-a3eb-ec2243a4f6d4"
   features {}
 }
 
@@ -63,20 +63,6 @@ resource "azurerm_subnet" "subnet-db" {
       15,
     )
   ]
-}
-
-# enable global peering between the two virtual network
-resource "azurerm_virtual_network_peering" "peering" {
-  count                        = length(var.location)
-  name                         = "peering-to-${element(azurerm_virtual_network.vnet.*.name, 1 - count.index)}"
-  resource_group_name          = element(azurerm_resource_group.rg-web.*.name, count.index)
-  virtual_network_name         = element(azurerm_virtual_network.vnet.*.name, count.index)
-  remote_virtual_network_id    = element(azurerm_virtual_network.vnet.*.id, 1 - count.index)
-  allow_virtual_network_access = true
-  allow_forwarded_traffic      = true
-
-  # allow_gateway_transit` must be set to false for vnet Global Peering
-  allow_gateway_transit = false
 }
 
 # Create Security group and rules for web VM
@@ -216,4 +202,18 @@ resource "azurerm_linux_virtual_machine" "vm-db" {
     sku       = "20_04-lts-gen2"
     version   = "latest"
   }
+}
+
+# enable global peering between the two virtual network
+resource "azurerm_virtual_network_peering" "peering" {
+  count                        = length(var.location)
+  name                         = "peering-to-${element(azurerm_virtual_network.vnet.*.name, 1 - count.index)}"
+  resource_group_name          = element(azurerm_resource_group.rg-web.*.name, count.index)
+  virtual_network_name         = element(azurerm_virtual_network.vnet.*.name, count.index)
+  remote_virtual_network_id    = element(azurerm_virtual_network.vnet.*.id, 1 - count.index)
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+
+  # allow_gateway_transit` must be set to false for vnet Global Peering
+  allow_gateway_transit = false
 }
