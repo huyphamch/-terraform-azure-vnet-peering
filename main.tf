@@ -12,8 +12,8 @@ terraform {
 
 # Configure the Azure Provider
 provider "azurerm" {
-  tenant_id       = "618e073f-1654-4751-98de-a4f0bbb8c7d2"
-  subscription_id = "3ba5e883-0257-4677-a3eb-ec2243a4f6d4"
+  tenant_id       = "af53965b-fa7a-411b-a95f-5f8c41d501e5"
+  subscription_id = "7132032a-f179-42d9-8a37-3738035ff911"
   features {}
 }
 
@@ -36,16 +36,7 @@ resource "azurerm_subnet" "subnet-web" {
   name                 = "subnet-web-${var.prefix}-${count.index}"
   resource_group_name  = element(azurerm_resource_group.rg-web.*.name, count.index)
   virtual_network_name = element(azurerm_virtual_network.vnet.*.name, count.index)
-  address_prefixes = [
-    cidrsubnet(
-      element(
-        azurerm_virtual_network.vnet[count.index].address_space,
-        count.index,
-      ),
-      4,
-      0,
-    )
-  ]
+  address_prefixes     = [cidrsubnet(element(var.vnet_address_space, count.index), 4, 0)]
 }
 
 resource "azurerm_subnet" "subnet-db" {
@@ -53,16 +44,7 @@ resource "azurerm_subnet" "subnet-db" {
   name                 = "subnet-db-${var.prefix}-${count.index}"
   resource_group_name  = element(azurerm_resource_group.rg-web.*.name, count.index)
   virtual_network_name = element(azurerm_virtual_network.vnet.*.name, count.index)
-  address_prefixes = [
-    cidrsubnet(
-      element(
-        azurerm_virtual_network.vnet[count.index].address_space,
-        count.index,
-      ),
-      4,
-      15,
-    )
-  ]
+  address_prefixes     = [cidrsubnet(element(var.vnet_address_space, count.index), 4, 15)]
 }
 
 # Create Security group and rules for web VM
@@ -71,6 +53,13 @@ resource "azurerm_network_security_group" "nsg-web" {
   name                = "nsg-web-${var.prefix}-${count.index}"
   location            = element(azurerm_resource_group.rg-web.*.location, count.index)
   resource_group_name = element(azurerm_resource_group.rg-web.*.name, count.index)
+}
+
+# Associate the NSG with the Subnet
+resource "azurerm_subnet_network_security_group_association" "web-nsg-association" {
+  count                     = length(var.location)
+  subnet_id                 = element(azurerm_subnet.subnet-web.*.id, count.index)
+  network_security_group_id = element(azurerm_network_security_group.nsg-web.*.id, count.index)
 }
 
 resource "azurerm_network_security_rule" "nsg-rdp-web-rule" {
@@ -105,22 +94,6 @@ resource "azurerm_network_security_rule" "nsg-ssh-web-rule" {
   network_security_group_name = element(azurerm_network_security_group.nsg-web.*.name, count.index)
 }
 
-resource "azurerm_network_security_rule" "nsg-icmp-web-rule" {
-  count                       = length(var.location)
-  name                        = "icmp"
-  description                 = "Allow ICMP for AWS VPC resources"
-  priority                    = 102
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Icmp"
-  source_port_range           = "*"
-  destination_port_range      = "*"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = element(azurerm_resource_group.rg-web.*.name, count.index)
-  network_security_group_name = element(azurerm_network_security_group.nsg-web.*.name, count.index)
-}
-
 # Create Virtual Machine (VM) for public Web
 resource "azurerm_windows_virtual_machine_scale_set" "scale" {
   count               = length(var.location)
@@ -135,7 +108,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "scale" {
   source_image_reference {
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
-    sku       = "2016-Datacenter-Server-Core"
+    sku       = "2019-Datacenter"
     version   = "latest"
   }
 
@@ -147,8 +120,8 @@ resource "azurerm_windows_virtual_machine_scale_set" "scale" {
   network_interface {
     name    = "nic-web-${var.prefix}-${count.index}"
     primary = true
-    # Apply Security group rules on network interface of VM
-    network_security_group_id = element(azurerm_network_security_group.nsg-web.*.id, count.index)
+    # Don't apply Security group rules on network interface of VM because it is set on subnet level
+    #network_security_group_id = element(azurerm_network_security_group.nsg-web.*.id, count.index)
 
     ip_configuration {
       name      = "internal"
