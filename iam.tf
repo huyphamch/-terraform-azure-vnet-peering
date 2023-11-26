@@ -1,4 +1,5 @@
-resource "azuread_user" "operator" {
+# Add onboarded user and assign him custom role with least privilege 
+resource "azuread_user" "onboarded" {
   user_principal_name   = var.custom_email
   display_name          = "Test user"
   mail_nickname         = "test"
@@ -38,6 +39,6 @@ resource "azurerm_role_definition" "vmuser" {
 resource "azurerm_role_assignment" "role-assignment" {
   scope              = data.azurerm_subscription.current.id
   role_definition_id = azurerm_role_definition.vmuser.role_definition_resource_id
-  principal_id       = azuread_user.operator.id
+  principal_id       = azuread_user.onboarded.id
 }
 

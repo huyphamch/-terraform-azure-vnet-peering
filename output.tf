@@ -3,7 +3,7 @@ output "CurrentSubscriptionId" {
   value       = data.azurerm_subscription.current.id
 }
 
-output "Custom_Email" {
-  description = "Operator email"
-  value       = azuread_user.operator.user_principal_name
+output "Email_Onboarded_User" {
+  description = "Email from onboarded user"
+  value       = azuread_user.onboarded.user_principal_name
 }

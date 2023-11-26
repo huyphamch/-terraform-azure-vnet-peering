@@ -9,7 +9,7 @@ variable "subscription_id" {
 }
 
 variable "custom_email" {
-  description = "Notification email for operator"
+  description = "Notification email for onboarded user"
   default     = "az104-user@simplilearnhol16.onmicrosoft.com"
 }
 
