@@ -10,7 +10,7 @@ resource "azuread_user" "onboarded" {
 data "azurerm_subscription" "current" {
 }
 
-resource "azurerm_role_definition" "vmuser" {
+resource "azurerm_role_definition" "custom" {
   name        = "Virtual Machine User"
   scope       = data.azurerm_subscription.current.id
   description = "Can (re-)start virtual machines and read storage/network/subscriptions"
@@ -38,7 +38,7 @@ resource "azurerm_role_definition" "vmuser" {
 
 resource "azurerm_role_assignment" "role-assignment" {
   scope              = data.azurerm_subscription.current.id
-  role_definition_id = azurerm_role_definition.vmuser.role_definition_resource_id
+  role_definition_id = azurerm_role_definition.custom.role_definition_resource_id
   principal_id       = azuread_user.onboarded.id
 }
 
