@@ -35,4 +35,5 @@ variable "admin_password" {
 
 variable "custom_email" {
   description = "Notification email"
+  default     = "huy.phamch@gmail.com"
 }
