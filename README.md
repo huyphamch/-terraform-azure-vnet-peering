@@ -41,7 +41,16 @@ Expected Deliverables:
 <br /> 3. Now you can apply the terraform changes.
 <br /> terraform init
 <br /> terraform apply --auto-approve
-<br /> 4. tbd.
-<br /> Test result: Ping answer messages received.
+<br /> 4. Testing
+<br />Test 1: 
+<br /> - Login with user custom_email and update password
+<br /> - Restart and Start VM.
+<br /> - Stop VM should not be allowed. 
+<br />Test 2: 
+<br /> - Trigger a Failure: Simulate a failure or unhealthy state in one of the instances. You can do this by stopping the web server on one of the VMs, causing it to respond negatively to the health probe.
+<br /> - Monitor Load Balancer Status: Monitor the load balancer's status or logs to observe how it reacts to the unhealthy instance. Use Azure's monitoring tools or log analytics to check the backend pool's health status and see if the unhealthy instance is removed from the pool.
+<br /> - Test Traffic Routing: Send test traffic to the load balancer's frontend IP or DNS name. Observe whether the traffic is routed only to the healthy instances. You can do this by monitoring network traffic or checking application logs on the VMs to see which instances are receiving requests.
+<br /> - Recover Unhealthy Instance: Resolve the issue on the unhealthy instance to make it healthy again. Monitor the load balancer's behavior to confirm that it includes the recovered instance back into the pool for serving traffic.
+<br /> - Test Traffic Routing: Send test traffic to the load balancer's frontend IP or DNS name. Observe whether the traffic is routed only to the healthy instances. 
 <br /> 5. At the end you can cleanup the created AWS resources.
 <br /> terraform destroy --auto-approve

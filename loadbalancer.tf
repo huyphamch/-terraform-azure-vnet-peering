@@ -32,9 +32,11 @@ resource "azurerm_lb_probe" "probe" {
   count               = length(var.location)
   loadbalancer_id     = element(azurerm_lb.lb.*.id, count.index)
   name                = "probe-${var.prefix}-${count.index}"
+  protocol            = "http"
   port                = var.application_port
+  path                = "/"
   interval_in_seconds = 5
-  #number_of_probes    = 2
+  probe_threshold     = 2
 }
 
 resource "azurerm_lb_rule" "lbnatrule" {
