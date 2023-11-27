@@ -30,7 +30,7 @@ Expected Deliverables:
 1. The following resources were created to achieve 1. objective:
 <br /> Network and compute resources:
 - Create two VNets in separate resource groups
-- Create jump server VM in public subnet and db VM in private subnet in each VNet
+- Create jump server VM with public IP-Address in public subnet and db VM in private subnet in each VNet
 - Create peering between two VNets
 - Allow users to use rdp to access resources in public subnet
 IAM resources:
