@@ -48,7 +48,7 @@ Expected Deliverables:
 <br /> 4. Testing
 <br />Test 1: 
 <br /> - Login with user root account
-<br /> - Check if Peering connection ist established. 
+<br /> - Check if [Peering connection](https://github.com/huyphamch/terraform-azure-vnet-peering/Screenshot/Test1_01_Peering.png) ist established. 
 <br /> - Login into jump server VM using RDP and from there use RDP again to connect to db VM from the other VNet. It should work.
 <br /> - Login with onboarded user custom_email and admin_password and then change password
 <br /> - Restart db VM on both VNets works.
