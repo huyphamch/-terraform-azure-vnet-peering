@@ -48,11 +48,11 @@ Expected Deliverables:
 <br /> 4. Testing
 <br />Test 1: 
 <br /> - Login with user root account
-<br /> - Check if [Peering connection](https://github.com/huyphamch/terraform-azure-vnet-peering/Screenshot/Test1_01_Peering.png) ist established. 
-<br /> - Login into jump server VM using RDP and from there use RDP again to connect to db VM from the other VNet. It should work.
+<br /> - Check if Peering connection ist established. [Screenshot](https://github.com/huyphamch/terraform-azure-vnet-peering/blob/main/Screenshot/Test1_01_Peering.png)
+<br /> - Login into jump server VM using RDP and from there use RDP again to connect to db VM from the other VNet. It should work. [Screenshot](https://github.com/huyphamch/terraform-azure-vnet-peering/blob/main/Screenshot/Test1_02_RDP_External_VNet.png)
 <br /> - Login with onboarded user custom_email and admin_password and then change password
-<br /> - Restart db VM on both VNets works.
-<br /> - Stop VM should not be allowed on both VNets.
+<br /> - Restart db VM on both VNets works. [Screenshot](https://github.com/huyphamch/terraform-azure-vnet-peering/blob/main/Screenshot/Test1_03_Restart_dbVM.png)
+<br /> - Stop VM should not be allowed on both VNets. [Screenshot](https://github.com/huyphamch/terraform-azure-vnet-peering/blob/main/Screenshot/Test1_04_Stop_dbVM.png)
 <br />Test 2: 
 <br /> - Login with user root account
 <br /> - Test Traffic Routing: Enter load balancer's frontend IP or DNS name in browser. The IIS default website is shown.
