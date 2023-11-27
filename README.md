@@ -32,7 +32,7 @@ Expected Deliverables:
 - Create two VNets in separate resource groups
 - Create jump server VM with public IP-Address in public subnet and db VM in private subnet in each VNet
 - Create peering between two VNets
-- Allow users to use rdp to access resources in public subnet
+- Allow users to use rdp to access resources with public IP-Address in public subnet
 IAM resources:
 - Create onboarded user
 - Create custom role definition and grant permission to read subscriptions, resource groups, storage, network and to restart VMs
