@@ -85,7 +85,7 @@ resource "azurerm_network_security_rule" "nsg-http-web-rule" {
   network_security_group_name = element(azurerm_network_security_group.nsg-web.*.name, count.index)
 }
 
-# enable global peering between the two virtual network
+# enable peering between the two virtual network
 resource "azurerm_virtual_network_peering" "peering" {
   count                     = length(var.location)
   name                      = "peering-to-${element(azurerm_virtual_network.vnet.*.name, 1 - count.index)}"

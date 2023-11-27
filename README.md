@@ -31,6 +31,10 @@ Expected Deliverables:
 - Extend the load balancer with backend pool and frontend IP
 - Define the Health probe
 
+## Solution
+![Image](https://github.com/huyphamch/terraform-azure-vnet-peering/blob/main/diagrams/IT-Architecture.png)
+
+
 ## Usage
 <br /> 1. Open terminal
 <br /> 2. Before you can execute the terraform script, your need to configure your Azure environment first.
@@ -45,12 +49,13 @@ Expected Deliverables:
 <br />Test 1: 
 <br /> - Login with user root account
 <br /> - Check if Peering connection ist established. 
-<br /> - Login into one VM and use RDP to connect to VM on another VNet. It should work.
-<br /> - Stop VM should not be allowed on both VNets.
-<br /> - Login with user custom_email and update password
-<br /> - Restart and Start VM on both VNets.
+<br /> - Login into jump server VM using RDP and from there use RDP again to connect to db VM from the other VNet. It should work.
+<br /> - Login with onboarded user custom_email and admin_password and then change password
+<br /> - Restart db VM on both VNets works.
 <br /> - Stop VM should not be allowed on both VNets.
 <br />Test 2: 
+<br /> - Login with user root account
+<br /> - Test Traffic Routing: Enter load balancer's frontend IP or DNS name in browser. The IIS default website is shown.
 <br /> - Trigger a Failure: Simulate a failure or unhealthy state in one of the instances. You can do this by stopping the web server on one of the VMs, causing it to respond negatively to the health probe.
 <br /> - Monitor Load Balancer Status: Monitor the load balancer's status or logs to observe how it reacts to the unhealthy instance. Use Azure's monitoring tools or log analytics to check the backend pool's health status and see if the unhealthy instance is removed from the pool.
 <br /> - Test Traffic Routing: Send test traffic to the load balancer's frontend IP or DNS name. Observe whether the traffic is routed only to the healthy instances. You can do this by monitoring network traffic or checking application logs on the VMs to see which instances are receiving requests.

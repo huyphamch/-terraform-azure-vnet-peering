@@ -1,8 +1,8 @@
 # Add onboarded user and assign him custom role with least privilege 
 resource "azuread_user" "onboarded" {
   user_principal_name   = var.custom_email
-  display_name          = "Test user"
-  mail_nickname         = "test"
+  display_name          = "Onboarded user"
+  mail_nickname         = "onboarded"
   password              = var.admin_password
   force_password_change = true
 }

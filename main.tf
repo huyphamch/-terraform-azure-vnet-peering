@@ -19,7 +19,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "rg-web" {
   count    = length(var.location)
-  name     = "rg-global-vnet-peering-${count.index}"
+  name     = "rg-vnet-peering-${count.index}"
   location = element(var.location, count.index)
 }
 
