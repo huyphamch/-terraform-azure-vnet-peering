@@ -27,8 +27,23 @@ Expected Deliverables:
 
 ## Solution
 ![Image](https://github.com/huyphamch/terraform-azure-vnet-peering/blob/main/diagrams/IT-Architecture.png)
-
-
+1. The following resources were created to achieve 1. objective:
+Network and compute resources:
+- Create two VNets in separate resource groups
+- Create jump server VM in public subnet and db VM in private subnet in each VNet
+- Create peering between two VNets
+- Allow users to use rdp to access resources in public subnet
+IAM resources:
+- Create onboarded user
+- Create custom role definition and grant permission to read subscriptions, resource groups, storage, network and to restart VMs
+- Assin user the created custom role
+2. The following resources were created in addition to achieve 2. objective:
+Network and compute resources:
+- Create load balancer with public IP-Address and domain name in public subnet. The load balancer check the health of the assigned VMs server http-requests.
+- Create scale set to manage private VMs with web-server in public subnet and avoid downtime of handling http-requests.
+- Allow users to use http to access resources in public subnet
+- Refactor Terraform commands into different files grouped by resource categories: iam, loadbalancer, network, and vm to be reused in future projects.
+  
 ## Usage
 <br /> 1. Open terminal
 <br /> 2. Before you can execute the terraform script, your need to configure your Azure environment first.
