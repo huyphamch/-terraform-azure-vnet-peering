@@ -64,11 +64,9 @@ IAM resources:
 <br /> - Stop VM should not be allowed on both VNets. [Screenshot](https://github.com/huyphamch/terraform-azure-vnet-peering/blob/main/Screenshot/Test1_04_Stop_dbVM.png)
 <br />Test 2: 
 <br /> - Login with user root account
-<br /> - Test Traffic Routing: Enter load balancer's frontend IP or DNS name in browser. The IIS default website is shown.
-<br /> - Trigger a Failure: Simulate a failure or unhealthy state in one of the instances. You can do this by stopping the web server on one of the VMs, causing it to respond negatively to the health probe.
-<br /> - Monitor Load Balancer Status: Monitor the load balancer's status or logs to observe how it reacts to the unhealthy instance. Use Azure's monitoring tools or log analytics to check the backend pool's health status and see if the unhealthy instance is removed from the pool.
-<br /> - Test Traffic Routing: Send test traffic to the load balancer's frontend IP or DNS name. Observe whether the traffic is routed only to the healthy instances. You can do this by monitoring network traffic or checking application logs on the VMs to see which instances are receiving requests.
-<br /> - Recover Unhealthy Instance: Resolve the issue on the unhealthy instance to make it healthy again. Monitor the load balancer's behavior to confirm that it includes the recovered instance back into the pool for serving traffic.
-<br /> - Test Traffic Routing: Send test traffic to the load balancer's frontend IP or DNS name. Observe whether the traffic is routed only to the healthy instances. 
+<br /> - Test Traffic Routing: Enter load balancer's frontend IP or DNS name in browser. The IIS default website is shown. [Screenshot](https://github.com/huyphamch/terraform-azure-vnet-peering/blob/main/Screenshot/Test2_01_Test_Traffic_Routing.png)
+<br /> - Trigger a Failure: Login into jump server VM using RDP and from there use RDP again to connect to web VMs. Simulate a failure or unhealthy state in one of the instances. You can do this by stopping the web server on all web VMs, causing it to respond negatively to the health probe. [Screenshot](https://github.com/huyphamch/terraform-azure-vnet-peering/blob/main/Screenshot/Test2_02_TriggerFailure.png) 
+<br /> - Recover Unhealthy Instance: Start the web server on one of the VMs again resolves the issue on the unhealthy instance to make it healthy again. Monitor the load balancer's behavior to confirm that it includes the recovered instance back into the pool for serving traffic.
+<br /> - Test Traffic Routing: Enter load balancer's frontend IP or DNS name in browser. The IIS default website is shown. [Screenshot](https://github.com/huyphamch/terraform-azure-vnet-peering/blob/main/Screenshot/Test2_03_Test_Traffic_Routing.png)
 <br /> 5. At the end you can cleanup the created AWS resources.
 <br /> terraform destroy --auto-approve
