@@ -70,7 +70,7 @@ resource "azurerm_monitor_autoscale_setting" "vmss" {
   name                = "vmss-mon-${var.prefix}-${count.index}"
   location            = element(var.location, count.index)
   resource_group_name = element(azurerm_resource_group.rg-web.*.name, count.index)
-  target_resource_id  = element(azurerm_windows_virtual_machine_scale_set.scale.*.id, count.index)
+  target_resource_id  = element(azurerm_linux_virtual_machine_scale_set.scale.*.id, count.index)
 
   profile {
     name = "defaultProfile"
@@ -84,7 +84,7 @@ resource "azurerm_monitor_autoscale_setting" "vmss" {
     rule {
       metric_trigger {
         metric_name        = "Percentage CPU"
-        metric_resource_id = element(azurerm_windows_virtual_machine_scale_set.scale.*.id, count.index)
+        metric_resource_id = element(azurerm_linux_virtual_machine_scale_set.scale.*.id, count.index)
         time_grain         = "PT1M"
         statistic          = "Average"
         time_window        = "PT5M"
@@ -110,7 +110,7 @@ resource "azurerm_monitor_autoscale_setting" "vmss" {
     rule {
       metric_trigger {
         metric_name        = "Percentage CPU"
-        metric_resource_id = element(azurerm_windows_virtual_machine_scale_set.scale.*.id, count.index)
+        metric_resource_id = element(azurerm_linux_virtual_machine_scale_set.scale.*.id, count.index)
         time_grain         = "PT1M"
         statistic          = "Average"
         time_window        = "PT5M"

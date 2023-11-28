@@ -1,16 +1,16 @@
 variable "tenant_id" {
   description = "The tenantId"
-  default     = "3943a345-5add-4713-9c9f-afa8753efe4c"
+  default     = "22e78c52-ef6d-4aba-a5c0-8da671ad5825"
 }
 
 variable "subscription_id" {
   description = "The subscriptionId"
-  default     = "da84ea64-e680-406d-90d1-c11693830e14"
+  default     = "e6e2bb59-b77e-4da8-a43f-e170a44ee6f6"
 }
 
 variable "custom_email" {
   description = "Notification email for onboarded user"
-  default     = "az104-user@simplilearnhol44.onmicrosoft.com"
+  default     = "az104-user@simplilearnhol50.onmicrosoft.com"
 }
 
 variable "prefix" {
