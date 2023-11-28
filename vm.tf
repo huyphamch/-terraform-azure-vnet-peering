@@ -2,17 +2,17 @@
 # Use Auto-Scaling to create Virtual Machines (VM) with web-server for public Web
 # resource "azurerm_windows_virtual_machine_scale_set" "scale" {
 resource "azurerm_linux_virtual_machine_scale_set" "scale" {
-  count                = length(var.location)
-  name                 = "vmss-${var.prefix}-${count.index}"
-  location             = element(azurerm_resource_group.rg-web.*.location, count.index)
-  resource_group_name  = element(azurerm_resource_group.rg-web.*.name, count.index)
-  sku                  = "Standard_D2s_v3"
-  instances            = 2
-  computer_name_prefix = "web-${var.prefix}-${count.index}"
-  admin_username       = var.admin_user
-  admin_password       = var.admin_password
-  disable_password_authentication = false # Linux only
-  custom_data = base64encode(file("web.conf")) # Linux only
+  count                           = length(var.location)
+  name                            = "vmss-${var.prefix}-${count.index}"
+  location                        = element(azurerm_resource_group.rg-web.*.location, count.index)
+  resource_group_name             = element(azurerm_resource_group.rg-web.*.name, count.index)
+  sku                             = "Standard_D2s_v3"
+  instances                       = 2
+  computer_name_prefix            = "web-${var.prefix}-${count.index}"
+  admin_username                  = var.admin_user
+  admin_password                  = var.admin_password
+  disable_password_authentication = false                          # Linux only
+  custom_data                     = base64encode(file("web.conf")) # Linux only
 
   source_image_reference {
     publisher = "Canonical"
@@ -21,7 +21,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "scale" {
     version   = "latest"
   }
 
-/*   source_image_reference {
+  /*   source_image_reference {
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
     sku       = "2019-Datacenter"
