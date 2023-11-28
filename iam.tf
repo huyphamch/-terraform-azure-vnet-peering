@@ -11,7 +11,7 @@ data "azurerm_subscription" "current" {
 }
 
 resource "azurerm_role_definition" "custom" {
-  name        = "Virtual Machine User"
+  name        = "OnboardedUserRole"
   scope       = data.azurerm_subscription.current.id
   description = "Can (re-)start virtual machines and read storage/network/subscriptions"
 

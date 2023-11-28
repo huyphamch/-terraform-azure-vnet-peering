@@ -1,7 +1,7 @@
 
 # Use Auto-Scaling to create Virtual Machines (VM) with web-server for public Web
-resource "azurerm_windows_virtual_machine_scale_set" "scale" {
-  #resource "azurerm_linux_virtual_machine_scale_set" "scale" {
+# resource "azurerm_windows_virtual_machine_scale_set" "scale" {
+resource "azurerm_linux_virtual_machine_scale_set" "scale" {
   count                = length(var.location)
   name                 = "vmss-${var.prefix}-${count.index}"
   location             = element(azurerm_resource_group.rg-web.*.location, count.index)
@@ -11,22 +11,22 @@ resource "azurerm_windows_virtual_machine_scale_set" "scale" {
   computer_name_prefix = "web-${var.prefix}-${count.index}"
   admin_username       = var.admin_user
   admin_password       = var.admin_password
-  # disable_password_authentication = false # Linux only
-  # custom_data = base64encode(file("web.conf")) # Linux only
+  disable_password_authentication = false # Linux only
+  custom_data = base64encode(file("web.conf")) # Linux only
 
-  /*   source_image_reference {
+  source_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
     sku       = "16.04-LTS"
     version   = "latest"
-  } */
+  }
 
-  source_image_reference {
+/*   source_image_reference {
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
-    sku       = "2016-Datacenter-Server-Core"
+    sku       = "2019-Datacenter"
     version   = "latest"
-  }
+  } */
 
   os_disk {
     storage_account_type = "Standard_LRS"
@@ -42,15 +42,15 @@ resource "azurerm_windows_virtual_machine_scale_set" "scale" {
       primary                                = true
       subnet_id                              = element(azurerm_subnet.subnet-web.*.id, count.index)
       load_balancer_backend_address_pool_ids = [element(azurerm_lb_backend_address_pool.bpepool.*.id, count.index)]
-      public_ip_address {
-        name                    = "pip-web-${var.prefix}-${count.index}"
-        idle_timeout_in_minutes = 15
-      }
+      # public_ip_address {
+      #   name                    = "pip-web-${var.prefix}-${count.index}"
+      #   idle_timeout_in_minutes = 15
+      # }
     }
   }
 }
 
-resource "azurerm_virtual_machine_scale_set_extension" "iis_vmss_extension" {
+/* resource "azurerm_virtual_machine_scale_set_extension" "iis_vmss_extension" {
   count                        = length(var.location)
   name                         = "iis-ext-${var.prefix}-${count.index}"
   virtual_machine_scale_set_id = element(azurerm_windows_virtual_machine_scale_set.scale.*.id, count.index)
@@ -59,10 +59,10 @@ resource "azurerm_virtual_machine_scale_set_extension" "iis_vmss_extension" {
   type_handler_version         = "1.9"
   settings                     = <<SETTINGS
     {
-        "commandToExecute": "powershell -ExecutionPolicy Unrestricted Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools"
+      "commandToExecute": "powershell.exe Install-WindowsFeature -Name Web-Server -IncludeManagementTools"
     }
-SETTINGS
-}
+    SETTINGS
+} */
 
 # Configure Auto-Scaling thresholds to scale in or out
 resource "azurerm_monitor_autoscale_setting" "vmss" {
@@ -190,7 +190,7 @@ resource "azurerm_windows_virtual_machine" "jumpbox" {
   source_image_reference {
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
-    sku       = "2016-Datacenter"
+    sku       = "2019-Datacenter"
     version   = "latest"
   }
 }
@@ -240,7 +240,7 @@ resource "azurerm_windows_virtual_machine" "vm-db" {
   source_image_reference {
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
-    sku       = "2016-Datacenter"
+    sku       = "2019-Datacenter"
     version   = "latest"
   }
 }
